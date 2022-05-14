@@ -1,0 +1,30 @@
+type NFTToken @entity {
+  id: ID!
+  uri: String
+  supply: BigInt!
+  minted: BigInt!
+  creator: User!
+  owners: [NFTOwnership!] @derivedFrom(field: "token")
+}
+
+type NFTOwnership @entity {
+  id: ID!
+  token: NFTToken
+  units: BigInt!
+  owner: User!
+  creator: User!
+}
+
+type NFTApproval @entity {
+  id: ID!
+  operators: [User!]
+}
+
+type User @entity {
+  id: ID!
+  minted: [NFTOwnership!] @derivedFrom(field: "creator")
+  collected: [NFTOwnership!] @derivedFrom(field: "owner")
+  operators: [NFTApproval!] @derivedFrom(field: "operators")
+}
+
+
